@@ -1,19 +1,23 @@
 'use strict';
 
-var app = angular.module( 'app' , [] );
+var app = angular.module( 'app' , [ 'ngRoute' , 'controllers' ] );
 
-app.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http ){
-	
+app.config( [ '$routeProvider' , '$httpProvider' , function( $routeProvider , $httpProvider ) {
 
-	$http.get( 'model/produkty.json' ).
-	success( function( data ){
-		$scope.products = data;
-	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
+	$routeProvider.when( '/products' , {
+		controller : 'products',
+		templateUrl : 'partials/products.html'
 	});
 
+	$routeProvider.when( '/product/:id' , {
+		controller: 'product',
+		templateUrl : 'partials/product.html'
+	});
 
-
-	// console.log(  );
+	$routeProvider.otherwise({
+		redirectTo: '/home'
+	});
 
 }]);
+
+

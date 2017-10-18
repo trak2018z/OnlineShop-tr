@@ -1,0 +1,22 @@
+<div class="container">
+  <div class="row">
+    <div class="col-xs-6">
+      <input type="text" class="form-control" placeholder="szukaj..." ng-model="search">
+      <br>
+    </div>
+  </div>
+
+  <div ng-controller="products">
+    <div class="alert alert-info" ng-repeat="product in products | filter : search">
+      <span class="text-capitalize">{{product.nazwa}}</span>
+      <br>
+      waga szt.: {{product.waga}} kg
+      <br>
+      {{product.opis}}
+      <br>
+      {{product.cena | number:2}} zł / kg
+      <br>
+      <a href="#/product/{{$index}}" class="btn btn-default">Edytuj</a>
+    </div>
+  </div>
+</div>
