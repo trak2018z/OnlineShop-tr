@@ -2,13 +2,18 @@
 
 var app = angular.module( 'app' , [] );
 
-app.controller( 'products' , [ '$scope' , function( $scope ){
+app.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http ){
 	
-	$scope.products = [
-		{ nazwa : 'pomarańcza' , waga : 0.3 , opis : 'Świeże, smaczne, prosto z Hiszpanii' },
-		{ nazwa : 'jabłko' , waga : 0.2 , opis : 'Ligol prosto od polskich producentów' }
-	];
 
-	console.log(  );
+	$http.get( 'model/produkty.json' ).
+	success( function( data ){
+		$scope.products = data;
+	}).error( function(){
+		console.log( 'Błąd pobrania pliku json' );
+	});
+
+
+
+	// console.log(  );
 
 }]);
