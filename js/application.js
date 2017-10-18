@@ -1,9 +1,14 @@
 'use strict';
 
-var aplikacja = angular.module( 'aplikacja' , [] );
+var app = angular.module( 'app' , [] );
 
-aplikacja.controller( 'test' , [ '$scope' , function( $scope ){
+app.controller( 'products' , [ '$scope' , function( $scope ){
 	
-	$scope.nazwa = 'jakieś dane';
+	$scope.products = [
+		{ nazwa : 'pomarańcza' , waga : 0.3 , opis : 'Świeże, smaczne, prosto z Hiszpanii' },
+		{ nazwa : 'jabłko' , waga : 0.2 , opis : 'Ligol prosto od polskich producentów' }
+	];
+
+	console.log(  );
 
 }]);
