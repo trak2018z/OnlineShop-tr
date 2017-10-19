@@ -13,6 +13,13 @@ myCtrls.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http
 		console.log( 'Błąd pobrania pliku json' );
 	});
 
+	$scope.delete = function ( product , $index ) {
+		$scope.products.splice( $index , 1 );
+
+		// TODO: przesłać dane przez API
+
+	};
+
 }]);
 
 

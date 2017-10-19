@@ -18,8 +18,9 @@
       {{product.opis}}
       <br>
       {{product.cena | number:2}} zł / kg
-      <br>
+      <p>&nbsp;</p>
       <a href="#/product/edit/{{$index}}" class="btn btn-default">Edytuj</a>
+      <button ng-click="delete( product , $index )" class="btn btn-danger pull-right">Usuń</button>
     </div>
   </div>
 </div>
