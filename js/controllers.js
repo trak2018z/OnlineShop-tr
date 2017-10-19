@@ -16,9 +16,9 @@ myCtrls.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http
 }]);
 
 
-myCtrls.controller( 'product' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
+myCtrls.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
 
-	$http.get( 'model/produkty.json' ).
+	$http.post( 'model/produkty.json' ).
 	success( function( data ){
 		var products = data;
 		$scope.product = products[$routeParams.id];
@@ -27,8 +27,23 @@ myCtrls.controller( 'product' , [ '$scope' , '$http' , '$routeParams' , function
 	});
 
 	$scope.saveChanges = function ( product ) {
+
+		// TODO: przesłać dane przez API
+
 		console.log( product );
 		console.log( $routeParams.id );
+	};
+
+}]);
+
+
+myCtrls.controller( 'productCreate' , [ '$scope' , '$http' , function( $scope , $http ){
+
+	$scope.createProduct = function () {
+
+		// TODO: przesłać dane przez API
+
+		console.log( $scope.product );
 	};
 
 }]);

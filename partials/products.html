@@ -4,6 +4,9 @@
       <input type="text" class="form-control" placeholder="szukaj..." ng-model="search">
       <br>
     </div>
+    <div class="col-xs-6 text-right">
+      <a href="#/product/create" class="btn btn-success">Nowy produkt</a>
+    </div>
   </div>
 
   <div ng-controller="products">
@@ -16,7 +19,7 @@
       <br>
       {{product.cena | number:2}} zł / kg
       <br>
-      <a href="#/product/{{$index}}" class="btn btn-default">Edytuj</a>
+      <a href="#/product/edit/{{$index}}" class="btn btn-default">Edytuj</a>
     </div>
   </div>
 </div>
