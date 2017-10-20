@@ -14,7 +14,7 @@ myCtrls.controller( 'navigation' , [ '$scope' , '$location' , function( $scope ,
 
 myCtrls.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http ){
 	
-	$http.get( 'model/produkty.json' ).
+	$http.get( 'model/products.json' ).
 	success( function( data ){
 		$scope.products = data;
 	}).error( function(){
@@ -33,7 +33,7 @@ myCtrls.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http
 
 myCtrls.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
 
-	$http.post( 'model/produkty.json' ).
+	$http.post( 'model/products.json' ).
 	success( function( data ){
 		var products = data;
 		$scope.product = products[$routeParams.id];
@@ -64,6 +64,20 @@ myCtrls.controller( 'productCreate' , [ '$scope' , '$http' , function( $scope , 
 }]);
 
 
-myCtrls.controller( 'users' , [ '$scope' , '$location' , function( $scope , $location ){
+myCtrls.controller( 'users' , [ '$scope' , '$http' , function( $scope , $http ){
+
+	$http.get( 'model/users.json' ).
+	success( function( data ){
+		$scope.users = data;
+	}).error( function(){
+		console.log( 'Błąd pobrania pliku json' );
+	});
+
+	$scope.delete = function ( product , $index ) {
+		$scope.users.splice( $index , 1 );
+
+		// TODO: przesłać dane przez API
+
+	};
 
 }]);
