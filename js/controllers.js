@@ -73,11 +73,44 @@ myCtrls.controller( 'users' , [ '$scope' , '$http' , function( $scope , $http ){
 		console.log( 'Błąd pobrania pliku json' );
 	});
 
-	$scope.delete = function ( product , $index ) {
+	$scope.delete = function ( user , $index ) {
 		$scope.users.splice( $index , 1 );
 
 		// TODO: przesłać dane przez API
 
+	};
+
+}]);
+
+
+myCtrls.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
+
+	$http.post( 'model/users.json' ).
+	success( function( data ){
+		var users = data;
+		$scope.user = users[$routeParams.id];
+	}).error( function(){
+		console.log( 'Błąd pobrania pliku json' );
+	});
+
+	$scope.saveChanges = function ( user ) {
+
+		// TODO: przesłać dane przez API
+
+		console.log( user );
+		console.log( $routeParams.id );
+	};
+
+}]);
+
+
+myCtrls.controller( 'userCreate' , [ '$scope' , '$http' , function( $scope , $http ){
+
+	$scope.createUser = function () {
+
+		// TODO: przesłać dane przez API
+
+		console.log( $scope.user );
 	};
 
 }]);
