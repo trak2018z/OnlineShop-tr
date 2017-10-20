@@ -15,13 +15,13 @@
     <div class="col-sm-12">
 
       <div class="alert alert-info" ng-repeat="product in products | filter : search">
-        <span class="text-capitalize">{{product.nazwa}}</span>
+        <span class="text-capitalize">{{product.name}}</span>
         <br>
-        waga szt.: {{product.waga}} kg
+        waga szt.: {{product.weight}} kg
         <br>
-        {{product.opis}}
+        {{product.desc}}
         <br>
-        {{product.cena | number:2}} zł / kg
+        {{product.price | number:2}} zł / kg
         <p>&nbsp;</p>
         <a href="#/product/edit/{{$index}}" class="btn btn-default">Edytuj</a>
         <button ng-click="delete( product , $index )" class="btn btn-danger pull-right">Usuń</button>

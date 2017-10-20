@@ -39,6 +39,13 @@ app.config( [ '$routeProvider' , '$httpProvider' , function( $routeProvider , $h
 		templateUrl : 'partials/user-create.html'
 	});
 
+	// ================== Orders ====================
+
+	$routeProvider.when( '/orders' , {
+		controller: 'orders',
+		templateUrl : 'partials/orders.html'
+	});
+
 	// ================== Default ====================
 
 	$routeProvider.otherwise({
