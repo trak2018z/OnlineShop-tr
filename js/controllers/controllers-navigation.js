@@ -17,6 +17,10 @@ controllersNavigation.controller( 'navigation' , [ '$scope' , '$location' , 'car
 		return $location.path() === path;
 	};
 
+	$scope.$watch(function(){
+		$scope.cart = cartSrv.show().length;
+	});
+
 }]);
 
 
