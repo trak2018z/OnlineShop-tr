@@ -99,3 +99,45 @@ controllersSite.controller( 'cartCtrl' , [ '$scope' , '$http' , '$filter' , 'car
 	});
 
 }]);
+
+
+controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , function( $scope , $http ){
+
+	$http.get( 'model/orders.json' ).
+	success( function( data ){
+		$scope.orders = data;
+	}).error( function(){
+		console.log( 'Błąd pobrania pliku json' );
+	});
+
+}]);
+
+
+controllersAdmin.controller( 'login' , [ '$scope' , '$http' , function( $scope , $http ){
+
+	// TODO: pobrać dane z formularza i przesłać do bazy (uwierzytelnianie)
+
+	$scope.input = {};
+
+	$scope.formSubmit = function () {
+		$scope.errors = {};
+		$scope.errors.login = 'Błędne hasło lub email';
+		console.log( $scope.input );
+	};
+
+}]);
+
+
+controllersAdmin.controller( 'register' , [ '$scope' , '$http' , function( $scope , $http ){
+
+	// TODO: pobrać dane z formularza i przesłać do bazy (uwierzytelnianie)
+
+
+	$scope.formSubmit = function () {
+		$scope.errors = {};
+		$scope.errors.email = 'Przykładowy błąd';
+		$scope.submit = true;
+		console.log( $scope.input );
+	};
+
+}]);
