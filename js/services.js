@@ -49,6 +49,10 @@ myServices.factory( 'cartSrv' , [ 'store' , function( store ) {
 		cart.length = 0;
 	};
 
+	cart.update = function ( newCart ) {
+		store.set( 'cart' , newCart );
+	};
+
 	return cart;
 	
 }]);
