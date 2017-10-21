@@ -1,26 +1,9 @@
 'use strict';
 
-var myCtrls = angular.module( 'myCtrls' , [ 'ngRoute' ] );
+var controllersAdmin = angular.module( 'controllersAdmin' , [] );
 
 
-myCtrls.controller( 'navigation' , [ '$scope' , '$location' , function( $scope , $location ){
-
-	$scope.navigation = function () {
-		if ( /^\/admin/.test( $location.path() ) )
-			return 'partials/admin/navigation.html';
-		else
-			return 'partials/site/navigation.html';
-	};
-
-
-	$scope.isActive = function ( path ) {
-		return $location.path() === path;
-	};
-
-}]);
-
-
-myCtrls.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http ){
 	
 	$http.get( 'model/products.json' ).
 	success( function( data ){
@@ -39,7 +22,7 @@ myCtrls.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http
 }]);
 
 
-myCtrls.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
+controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
 
 	$http.post( 'model/products.json' ).
 	success( function( data ){
@@ -60,7 +43,7 @@ myCtrls.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , func
 }]);
 
 
-myCtrls.controller( 'productCreate' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersAdmin.controller( 'productCreate' , [ '$scope' , '$http' , function( $scope , $http ){
 
 	$scope.createProduct = function () {
 
@@ -72,7 +55,7 @@ myCtrls.controller( 'productCreate' , [ '$scope' , '$http' , function( $scope , 
 }]);
 
 
-myCtrls.controller( 'users' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersAdmin.controller( 'users' , [ '$scope' , '$http' , function( $scope , $http ){
 
 	$http.get( 'model/users.json' ).
 	success( function( data ){
@@ -91,7 +74,7 @@ myCtrls.controller( 'users' , [ '$scope' , '$http' , function( $scope , $http ){
 }]);
 
 
-myCtrls.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
+controllersAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
 
 	$http.post( 'model/users.json' ).
 	success( function( data ){
@@ -112,7 +95,7 @@ myCtrls.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , functio
 }]);
 
 
-myCtrls.controller( 'userCreate' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersAdmin.controller( 'userCreate' , [ '$scope' , '$http' , function( $scope , $http ){
 
 	$scope.createUser = function () {
 
@@ -124,7 +107,7 @@ myCtrls.controller( 'userCreate' , [ '$scope' , '$http' , function( $scope , $ht
 }]);
 
 
-myCtrls.controller( 'orders' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , function( $scope , $http ){
 
 	$http.get( 'model/orders.json' ).
 	success( function( data ){

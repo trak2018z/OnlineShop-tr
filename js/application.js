@@ -1,11 +1,11 @@
 'use strict';
 
-var app = angular.module( 'app' , [ 'ngRoute' , 'myCtrls' ] );
+var app = angular.module( 'app' , [ 'ngRoute' , 'controllersNavigation' , 'controllersAdmin' , 'controllersSite' ] );
 
 app.config( [ '$routeProvider' , '$httpProvider' , function( $routeProvider , $httpProvider ) {
 
 
-	// ================== Products ====================
+	// ================== Admin Products ====================
 
 	$routeProvider.when( '/admin/products' , {
 		controller : 'products',
@@ -22,7 +22,7 @@ app.config( [ '$routeProvider' , '$httpProvider' , function( $routeProvider , $h
 		templateUrl : 'partials/admin/product-create.html'
 	});
 
-	// ================== Users ====================
+	// ================== Admin Users ====================
 
 	$routeProvider.when( '/admin/users' , {
 		controller: 'users',
@@ -39,17 +39,29 @@ app.config( [ '$routeProvider' , '$httpProvider' , function( $routeProvider , $h
 		templateUrl : 'partials/admin/user-create.html'
 	});
 
-	// ================== Orders ====================
+	// ================== Admin Orders ====================
 
 	$routeProvider.when( '/admin/orders' , {
 		controller: 'orders',
 		templateUrl : 'partials/admin/orders.html'
 	});
 
+	// ================== Site Products ====================
+
+	$routeProvider.when( '/products' , {
+		controller : 'siteProducts',
+		templateUrl : 'partials/site/products.html'
+	});
+
+	$routeProvider.when( '/product/:id' , {
+		controller: 'siteProduct',
+		templateUrl : 'partials/site/product.html'
+	});
+
 	// ================== Default ====================
 
 	$routeProvider.otherwise({
-		redirectTo: '/home'
+		redirectTo: '/products'
 	});
 
 }]);
