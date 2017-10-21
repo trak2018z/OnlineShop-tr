@@ -3,7 +3,7 @@
 var controllersNavigation = angular.module( 'controllersNavigation' , [] );
 
 
-controllersNavigation.controller( 'navigation' , [ '$scope' , '$location' , 'store' , function( $scope , $location , store ){
+controllersNavigation.controller( 'navigation' , [ '$scope' , '$location' , 'cartSrv' , function( $scope , $location , cartSrv ){
 
 	$scope.navigation = function () {
 		if ( /^\/admin/.test( $location.path() ) )
@@ -16,10 +16,6 @@ controllersNavigation.controller( 'navigation' , [ '$scope' , '$location' , 'sto
 	$scope.isActive = function ( path ) {
 		return $location.path() === path;
 	};
-
-
-	store.set( 'test' , 'Nowa wartość!' );
-
 
 }]);
 
