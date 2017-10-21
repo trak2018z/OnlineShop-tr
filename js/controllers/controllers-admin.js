@@ -3,7 +3,7 @@
 var controllersAdmin = angular.module( 'controllersAdmin' , [] );
 
 
-controllersAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersAdmin.controller( 'products' , [ '$scope' , '$http' , 'cart' , function( $scope , $http , cart ){
 	
 	$http.get( 'model/products.json' ).
 	success( function( data ){
@@ -18,6 +18,8 @@ controllersAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scop
 		// TODO: przesłać dane przez API
 
 	};
+
+	cart.show();
 
 }]);
 
