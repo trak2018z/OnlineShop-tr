@@ -28,24 +28,52 @@ controllersAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scop
 
 controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , 'FileUploader' , function( $scope , $http , $routeParams , FileUploader ){
 
+	var productId = $routeParams.id;
+	$scope.id = productId;
+
 	$http.post( 'model/products.json' ).
 	success( function( data ){
 		var products = data;
-		$scope.product = products[$routeParams.id];
+		$scope.product = products[productId];
 	}).error( function(){
 		console.log( 'Błąd pobrania pliku json' );
 	});
+
+	function getImages(){
+		$http.get( 'Api/admin/images/get/' + productId ).
+	success( function( data ){
+		var products = data;
+		$scope.images = data;
+	}).error( function(){
+		console.log( 'Błąd pobrania pliku json' );
+	});
+	}
+	getImages();
+
+	
 
 	$scope.saveChanges = function ( product ) {
 
 		// TODO: przesłać dane przez API
 
 		console.log( product );
-		console.log( $routeParams.id );
+		console.log( productId );
+		console.log('zapisano');
+	};
+
+	$scope.delImage = function ( imageName, $index ) {
+		$http.post( 'Api/admin/images/delete/', {
+		 id : productId,
+		 image : imageName 
+		}).	success( function(  ){
+			$scope.images.splice( $index , 1 );
+		}).error( function(){
+			console.log( 'Błąd pobrania pliku json' );
+		});
 	};
 
     var uploader = $scope.uploader = new FileUploader({
-        url: '' // ścieżka do api obsługującego upload
+        url: 'Api/admin/images/upload/' + productId // ścieżka do api obsługującego upload
     });
 
     uploader.filters.push({
@@ -58,6 +86,7 @@ controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParam
 
     uploader.onCompleteItem = function(fileItem, response, status, headers) {
         console.info('onCompleteItem', fileItem, response, status, headers);
+        getImages();
     };
 
 
