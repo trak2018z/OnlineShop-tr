@@ -5,7 +5,7 @@ var controllersAdmin = angular.module( 'controllersAdmin' , [ 'angularFileUpload
 
 controllersAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http ){
 	
-	$http.get( 'model/products.json' ).
+	$http.get( 'Api/admin/Products/get' ).
 	success( function( data ){
 		$scope.products = data;
 	}).error( function(){
@@ -19,22 +19,25 @@ controllersAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scop
 
 		$scope.products.splice( $index , 1 );
 
-		// TODO: przesłać dane przez API
+		$http.post( 'Api/admin/Products/delete/' , {
+			product : product
+		}).error( function(){
+			console.log( 'Błąd komunikacji z API' );
+		});
 
 	};
 
 }]);
 
 
-controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , 'FileUploader' , function( $scope , $http , $routeParams , FileUploader ){
+controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , 'FileUploader' , '$timeout' , function( $scope , $http , $routeParams , FileUploader, $timeout ){
 
 	var productId = $routeParams.id;
 	$scope.id = productId;
 
-	$http.post( 'model/products.json' ).
+	$http.get( 'Api/admin/Products/get/' + productId ).
 	success( function( data ){
-		var products = data;
-		$scope.product = products[productId];
+		$scope.product = data;
 	}).error( function(){
 		console.log( 'Błąd pobrania pliku json' );
 	});
@@ -54,11 +57,19 @@ controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParam
 
 	$scope.saveChanges = function ( product ) {
 
-		// TODO: przesłać dane przez API
+		$http.post( 'Api/admin/Products/update/' , {
+			product : product
+		}).success( function(){
+			$scope.success = true;
 
-		console.log( product );
-		console.log( productId );
-		console.log('zapisano');
+			$timeout(function(){
+				$scope.success = false;
+			} , 3000 );
+
+		}).error( function(){
+			console.log( 'Błąd komunikacji z API' );
+		});
+
 	};
 
 	$scope.delImage = function ( imageName, $index ) {
@@ -93,13 +104,24 @@ controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParam
 }]);
 
 
-controllersAdmin.controller( 'productCreate' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersAdmin.controller( 'productCreate' , [ '$scope' , '$http' , '$timeout' ,  function( $scope , $http, $timeout ){
 
-	$scope.createProduct = function () {
+	$scope.createProduct = function ( product ) {
 
-		// TODO: przesłać dane przez API
+		$http.post( 'Api/admin/Products/create/' , {
+			product : product
+		}).success( function(){
+			$scope.success = true;
 
-		console.log( $scope.product );
+			$timeout(function(){
+				$scope.success = false;
+				$scope.product = {};
+			} , 3000 );
+
+		}).error( function(){
+			console.log( 'Błąd komunikacji z API' );
+		});
+
 	};
 
 }]);

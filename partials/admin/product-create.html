@@ -1,4 +1,4 @@
-<form ng-submit="createProduct()">
+<form ng-submit="createProduct( product )">
 
 <div class="container">
   <div class="row">
@@ -17,7 +17,7 @@
 
       <div class="form-group">
         <label>Opis</label>
-        <textarea rows="5" class="form-control" ng-model="product.desc"></textarea>
+        <textarea rows="5" class="form-control" ng-model="product.description"></textarea>
       </div>
 
       <div class="form-group">
@@ -31,7 +31,7 @@
 
       <h2>{{product.name}}</h2>
       <p>Waga: {{product.weight}}</p>
-      <p>{{product.desc}}</p>
+      <p>{{product.description}}</p>
       <h3><span class="label label-warning">
         {{product.price | number:2}} zł
       </span></h3>
@@ -42,7 +42,8 @@
   <div class="row">
     <div class="col-sm-12">
       <hr>
-      <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+      <button type="submit" class="btn btn-primary" ng-if="!success">Dodaj produkt</button>
+      <button type="button" class="btn btn-success" ng-if="success" disabled>Produkt dodany</button>
       <a href="#/admin/products" class="btn btn-default">Wróć bez zmian</a>
       <p>&nbsp;</p>
     </div>

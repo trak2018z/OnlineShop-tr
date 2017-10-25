@@ -27,10 +27,10 @@
             <h3><span class="label label-info">Waga: {{product.weight}} kg</span></h3>
             <br>
 
-            <p>{{product.desc}}</p>
+            <p>{{product.description}}</p>
             <br>
 
-            <a href="#/admin/product/edit/{{$index}}" class="btn btn-success">Edytuj</a>
+            <a href="#/admin/product/edit/{{product.id}}" class="btn btn-success">Edytuj</a>
             <button ng-click="delete( product , $index )" class="btn btn-danger pull-right">Usuń</button>
 
           </div>

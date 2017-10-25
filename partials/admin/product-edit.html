@@ -17,7 +17,7 @@
 
       <div class="form-group">
         <label>Opis</label>
-        <textarea rows="5" class="form-control" ng-model="product.desc"></textarea>
+        <textarea rows="5" class="form-control" ng-model="product.description"></textarea>
       </div>
 
       <div class="form-group">
@@ -115,17 +115,16 @@
 
       <h2>{{product.name}}</h2>
       <p>Waga: {{product.weight}}</p>
-      <p>{{product.desc}}</p>
+      <p>{{product.description}}</p>
       <h3><span class="label label-warning">
         {{product.price | number:2}} zł
       </span></h3>
 
       <div ng-repeat="image in images">
-        <div class="pull-left" style="position:relative;">
+          <div class="pull-left" style="position:relative;">
           <button type="button" ng-click="delImage( image , $index )" class="btn btn-danger btn-xs" style="position:absolute; right:0;"><strong>&times;</strong></button>
           <img ng-src="uploads/{{id}}/{{image}}" alt="" style="width:150px; margin:5px;" class="img-thumbnail">
           </div>
-
       </div>
 
     </div>
@@ -135,7 +134,8 @@
     <div class="col-sm-12 text-right">
       <hr>
       <a href="#/admin/products" class="btn btn-default">Wróć bez zmian</a>
-      <button type="submit" class="btn btn-primary">Zapisz zmiany</button>
+      <button type="submit" class="btn btn-primary" ng-if="!success">Zapisz zmiany</button>
+      <button type="button" class="btn btn-success" ng-if="success" disabled>Zmiany zapisane</button>
       <p>&nbsp;</p>
     </div>
   </div>
