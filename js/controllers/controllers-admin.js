@@ -84,7 +84,7 @@ controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParam
 	};
 
     var uploader = $scope.uploader = new FileUploader({
-        url: 'Api/admin/images/upload/' + productId // ścieżka do api obsługującego upload
+        url: 'Api/admin/images/upload/' + productId // ścieżka do Api obsługującego upload
     });
 
     uploader.filters.push({
@@ -129,7 +129,7 @@ controllersAdmin.controller( 'productCreate' , [ '$scope' , '$http' , '$timeout'
 
 controllersAdmin.controller( 'users' , [ '$scope' , '$http' , function( $scope , $http ){
 
-	$http.get( 'model/users.json' ).
+	$http.get( 'Api/admin/Users/get' ).
 	success( function( data ){
 		$scope.users = data;
 	}).error( function(){
@@ -143,41 +143,102 @@ controllersAdmin.controller( 'users' , [ '$scope' , '$http' , function( $scope ,
 
 		$scope.users.splice( $index , 1 );
 
-		// TODO: przesłać dane przez API
+		$http.post( 'Api/admin/users/delete/' , {
+			user : user
+		}).error( function(){
+			console.log( 'Błąd komunikacji z API' );
+		});
 
 	};
+
 
 }]);
 
 
-controllersAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , function( $scope , $http , $routeParams ){
+controllersAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , '$timeout' , function( $scope , $http , $routeParams , $timeout ){
 
-	$http.post( 'model/users.json' ).
+	var userId = $routeParams.id;
+	$scope.id = userId;
+
+	$http.post( 'Api/admin/Users/get/' + userId ).
 	success( function( data ){
-		var users = data;
-		$scope.user = users[$routeParams.id];
+		$scope.user = data;
+		console.log( data );
 	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
+		console.log( 'Błąd komunikacji z API' );
 	});
 
 	$scope.saveChanges = function ( user ) {
 
-		// TODO: przesłać dane przez API
+		$http.post( 'Api/admin/Users/update/' , {
+			user : user,
+			id : userId,
+			name : user.name,
+			email : user.email,
+			password : user.password,
+			passconf : user.passconf
+		}).success( function( errors ){
 
-		console.log( user );
-		console.log( $routeParams.id );
+			$scope.submit = true;
+			
+			if ( errors )
+			{
+				$scope.errors = errors;
+			}
+			else
+			{
+				$scope.success = true;
+				$timeout(function(){
+					$scope.success = false;
+					$scope.product = {};
+				} , 3000 );
+			}
+
+		}).error( function(){
+			console.log( 'Błąd komunikacji z API' );
+		});
+
 	};
+
 
 }]);
 
 
-controllersAdmin.controller( 'userCreate' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersAdmin.controller( 'userCreate' , [ '$scope' , '$http' , '$timeout' , function( $scope , $http , $timeout ){
 
-	$scope.createUser = function () {
+	$scope.user = {};
+	$scope.user.role = 'user';
 
-		// TODO: przesłać dane przez API
+	$scope.createUser = function ( user ) {
 
-		console.log( $scope.user );
+		$http.post( 'Api/admin/Users/create/' , {
+			user : user,
+			name : user.name,
+			email : user.email,
+			password : user.password,
+			passconf : user.passconf
+		}).success( function( errors ){
+
+			$scope.submit = true;
+			
+			if ( errors )
+			{
+				$scope.errors = errors;
+			}
+			else
+			{
+				$scope.errors = {};
+				$scope.success = true;
+				$timeout(function(){
+					$scope.success = false;
+					$scope.product = {};
+				} , 3000 );
+			}
+			
+		}).error( function(){
+			console.log( 'Błąd komunikacji z API' );
+		});
+
 	};
 
 }]);
@@ -204,6 +265,8 @@ controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , function( $scope 
 	};
 
 	$scope.changeStatus = function ( order ) {
+
+		console.log( 'test' );
 
 		if ( order.status == 0 )
 			order.status = 1;
