@@ -187,6 +187,7 @@ controllersAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' 
 			}
 			else
 			{
+				$scope.errors = {};
 				$scope.success = true;
 				$timeout(function(){
 					$scope.success = false;

@@ -25,7 +25,7 @@ class Users extends CI_Controller {
 		$this->form_validation->set_error_delimiters( '' , '' );
 		$this->form_validation->set_rules( 'name' , 'Imię' , 'required|min_length[3]' );
 		$this->form_validation->set_rules( 'email' , 'Email' , 'required|valid_email|callback_unique_email' );
-		$this->form_validation->set_rules( 'password' , 'Nowe hasło' , 'matches[passconf]' );
+		$this->form_validation->set_rules( 'password' , 'Nowe hasło' , 'min_length[6]|matches[passconf]' );
 		$this->form_validation->set_rules( 'passconf' , 'Powtórz nowe hasło' , 'matches[password]' );
 
 		if ( $this->form_validation->run() )
