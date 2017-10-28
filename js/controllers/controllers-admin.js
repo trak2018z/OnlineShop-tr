@@ -45,7 +45,6 @@ controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParam
 	function getImages(){
 		$http.get( 'Api/admin/images/get/' + productId ).
 	success( function( data ){
-		var products = data;
 		$scope.images = data;
 	}).error( function(){
 		console.log( 'Błąd pobrania pliku json' );

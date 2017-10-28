@@ -3,53 +3,90 @@
 var controllersSite = angular.module( 'controllersSite' , [] );
 
 
-controllersSite.controller( 'siteProducts' , [ '$scope' , '$http' , 'cartSrv' , function( $scope , $http , cartSrv ){
-	
-	$http.get( 'model/products.json' ).
+controllersSite.controller( 'siteProducts' , [ '$scope' , '$http' , 'cartSrv' , function( $scope , $http , cartSrv )
+{
+	$http.get( 'Api/site/Products/get' ).
 	success( function( data ){
 		$scope.products = data;
 	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
+		console.log( 'Błąd połączenia z API' );
 	});
 
 	$scope.addToCart = function ( product ) {
 		cartSrv.add( product );
 	};
+
+	$scope.checkCart = function ( product ) {
+		if ( cartSrv.show().length )
+		{
+			angular.forEach( cartSrv.show() , function( item ){
+				if ( item.id == product.id )
+				{
+					product.qty = item.qty;
+				}
+			});
+		}
+	}
 
 }]);
 
 
 controllersSite.controller( 'siteProduct' , [ '$scope' , '$http' , '$routeParams' , 'cartSrv' , function( $scope , $http , $routeParams , cartSrv ){
 
-	$http.post( 'model/products.json' ).
+	var id = $routeParams.id;
+
+	$http.post( 'Api/site/Products/get/' + id ).
 	success( function( data ){
-		var products = data;
-		$scope.product = products[$routeParams.id];
+		$scope.product = data;
+		$scope.checkCart( $scope.product );
 	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
+		console.log( 'Błąd połączenia z API' );
 	});
 
 	$scope.addToCart = function ( product ) {
 		cartSrv.add( product );
 	};
 
+	$scope.checkCart = function ( product ) {
+		if ( cartSrv.show().length )
+		{
+			angular.forEach( cartSrv.show() , function( item ){
+				if ( item.id == product.id )
+				{
+					product.qty = item.qty;
+				}
+			});
+		}
+	}
+
+	function getImages() {
+		$http.get( 'Api/site/Products/getImages/' + id ).
+		success( function( data ){
+			$scope.images = data; 
+		}).error( function(){
+			console.log( 'Błąd połączenia z API' );
+		});
+	}
+	getImages();
+
 }]);
 
 
-controllersSite.controller( 'siteOrders' , [ '$scope' , '$http' , function( $scope , $http ){
 
+controllersSite.controller( 'siteOrders' , [ '$scope' , '$http' , function( $scope , $http )
+{
 	$http.get( 'model/orders.json' ).
 	success( function( data ){
 		$scope.orders = data;
 	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
+		console.log( 'Błąd komunikacji z API' );
 	});
 
 }]);
 
 
-controllersSite.controller( 'cartCtrl' , [ '$scope' , '$http' , '$filter' , 'cartSrv' , function( $scope , $http , $filter , cartSrv ){
-
+controllersSite.controller( 'cartCtrl' , [ '$scope' , '$http' , '$filter' , 'cartSrv' , function( $scope , $http , $filter , cartSrv )
+{
 	$scope.cart = cartSrv.show();
 
 	$scope.emptyCart = function () {
@@ -101,20 +138,21 @@ controllersSite.controller( 'cartCtrl' , [ '$scope' , '$http' , '$filter' , 'car
 }]);
 
 
-controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , function( $scope , $http )
+{
 
 	$http.get( 'model/orders.json' ).
 	success( function( data ){
 		$scope.orders = data;
 	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
+		console.log( 'Błąd komunikacji z API' );
 	});
 
 }]);
 
 
-controllersAdmin.controller( 'login' , [ '$scope' , '$http' , function( $scope , $http ){
-
+controllersAdmin.controller( 'login' , [ '$scope' , '$http' , function( $scope , $http )
+{
 	// TODO: pobrać dane z formularza i przesłać do bazy (uwierzytelnianie)
 
 	$scope.input = {};
@@ -128,8 +166,8 @@ controllersAdmin.controller( 'login' , [ '$scope' , '$http' , function( $scope ,
 }]);
 
 
-controllersAdmin.controller( 'register' , [ '$scope' , '$http' , function( $scope , $http ){
-
+controllersAdmin.controller( 'register' , [ '$scope' , '$http' , function( $scope , $http )
+{
 	// TODO: pobrać dane z formularza i przesłać do bazy (uwierzytelnianie)
 
 
