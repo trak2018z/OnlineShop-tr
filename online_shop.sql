@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Czas generowania: 25 Paź 2017, 21:33
+-- Czas generowania: 28 Paź 2017, 12:10
 -- Wersja serwera: 10.1.28-MariaDB
 -- Wersja PHP: 7.1.10
 
@@ -86,39 +86,34 @@ CREATE TABLE `users` (
   `name` varchar(255) NOT NULL,
   `email` varchar(255) NOT NULL,
   `role` varchar(255) NOT NULL,
-  `password` varchar(255) NOT NULL,
-  `passconf` varchar(255) NOT NULL
+  `password` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Zrzut danych tabeli `users`
 --
 
-INSERT INTO `users` (`id`, `name`, `email`, `role`, `password`, `passconf`) VALUES
-(1, 'Ulla', 'enim.consequat@luctusetultrices.net', 'user', '', ''),
-(2, 'Zelenia', 'cursus.Nunc@dolor.com', 'user', '', ''),
-(3, 'Jenna', 'et@urna.com', 'user', '', ''),
-(4, 'Rose', 'faucibus@sitamet.edu', 'user', '', ''),
-(5, 'Sade', 'ultrices.posuere@malesuadaiderat.co.uk', 'user', '', ''),
-(6, 'Carlos', 'magna.Cras@mauris.com', 'user', 'asdasd', 'asdasd'),
-(7, 'Chancellor', 'magnis.dis@tristiquesenectus.net', 'user', '', ''),
-(8, 'Angela', 'blandit.mattis.Cras@convallis.net', 'user', '', ''),
-(9, 'Christine', 'placerat.Cras@ipsum.com', 'user', '', ''),
-(10, 'Bethany', 'Nunc.mauris.sapien@Sednuncest.edu', 'user', 'asd', 'asd'),
-(11, 'Quintessa', 'nulla@fermentumfermentum.net', 'user', '', ''),
-(12, 'Elaine', 'arcu.Nunc.mauris@nonegestas.org', 'user', '', ''),
-(13, 'Macaulay', 'In@Integervulputate.ca', 'user', '', ''),
-(14, 'Justina', 'at.risus.Nunc@augueidante.net', 'user', '', ''),
-(15, 'Chloe', 'mi.ac.mattis@nec.com', 'user', '', ''),
-(16, 'Sheila', 'a.purus@quam.ca', 'user', '', ''),
-(17, 'Cairo', 'a.magna.Lorem@uteros.co.uk', 'user', '', ''),
-(18, 'Molly', 'felis@ametanteVivamus.edu', 'user', '', ''),
-(22, 'Antonii', 'Antek123@antoni.com', 'user', 'asd', 'asd'),
-(23, 'Adam', 'Adam@gmail.com', 'user', 'Aw4', 'aw4'),
-(25, 'asd', 'asd@w.p', 'user', 'asd', 'asd'),
-(26, 'asd', 'sad@w.a', 'user', 'asd', 'asd'),
-(27, 'qwq', 'qw@w.a', 'user', 'asd', 'asd'),
-(28, 'asd', 'qwe@1.w', 'user', 'qwe', 'qwe');
+INSERT INTO `users` (`id`, `name`, `email`, `role`, `password`) VALUES
+(1, 'Ulla', 'enim.consequat@luctusetultrices.net', 'user', 'asdasd'),
+(2, 'Zelenia', 'cursus.Nunc@dolor.com', 'user', ''),
+(3, 'Jenna', 'et@urna.com', 'user', ''),
+(4, 'Rose', 'faucibus@sitamet.edu', 'user', ''),
+(5, 'Sade', 'ultrices.posuere@malesuadaiderat.co.uk', 'user', ''),
+(6, 'Carlos', 'magna.Cras@mauris.com', 'user', 'asdasd'),
+(7, 'Chancellor', 'magnis.dis@tristiquesenectus.net', 'user', ''),
+(8, 'Angela', 'blandit.mattis.Cras@convallis.net', 'user', ''),
+(9, 'Christine', 'placerat.Cras@ipsum.com', 'user', ''),
+(10, 'Bethany', 'Nunc.mauris.sapien@Sednuncest.edu', 'user', 'asd'),
+(11, 'Quintessa', 'nulla@fermentumfermentum.net', 'user', ''),
+(12, 'Elaine', 'arcu.Nunc.mauris@nonegestas.org', 'user', ''),
+(13, 'Macaulay', 'In@Integervulputate.ca', 'user', ''),
+(14, 'Justina', 'at.risus.Nunc@augueidante.net', 'user', ''),
+(15, 'Chloe', 'mi.ac.mattis@nec.com', 'user', ''),
+(16, 'Sheila', 'a.purus@quam.ca', 'user', ''),
+(17, 'Cairo', 'a.magna.Lorem@uteros.co.uk', 'user', ''),
+(18, 'Molly', 'felis@ametanteVivamus.edu', 'user', ''),
+(22, 'Antonii', 'Antek123@antoni.com', 'user', 'asd'),
+(23, 'Adam', 'Adam@gmail.com', 'user', 'Aw4');
 
 --
 -- Indeksy dla zrzutów tabel
@@ -156,13 +151,13 @@ ALTER TABLE `orders`
 -- AUTO_INCREMENT dla tabeli `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(11) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT dla tabeli `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

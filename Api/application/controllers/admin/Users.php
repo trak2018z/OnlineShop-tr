@@ -31,6 +31,10 @@ class Users extends CI_Controller {
 		if ( $this->form_validation->run() )
 		{
 			$user = $this->input->post( 'user' );
+			unset ($user['passconf']);
+
+			$user['password'] = crypt( $user['password'], config_item('encryption_key'));
+
 			$this->User_model->update( $user );
 		}
 		else
@@ -49,12 +53,16 @@ class Users extends CI_Controller {
 		$this->form_validation->set_error_delimiters( '' , '' );
 		$this->form_validation->set_rules( 'name' , 'Imię' , 'required|min_length[3]' );
 		$this->form_validation->set_rules( 'email' , 'Email' , 'required|valid_email|is_unique[users.email]' );
-		$this->form_validation->set_rules( 'password' , 'Hasło' , 'required|matches[passconf]' );
+		$this->form_validation->set_rules( 'password' , 'Hasło' , 'required|min_length[6]|matches[passconf]' );
 		$this->form_validation->set_rules( 'passconf' , 'Powtórz hasło' , 'required|matches[password]' );
 
 		if ( $this->form_validation->run() )
 		{
 			$user = $this->input->post( 'user' );
+			unset ($user['passconf']);
+
+			$user['password'] = crypt( $user['password'], config_item('encryption_key'));
+
 			$this->User_model->create( $user );
 		}
 		else

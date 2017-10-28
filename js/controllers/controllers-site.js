@@ -168,14 +168,33 @@ controllersAdmin.controller( 'login' , [ '$scope' , '$http' , function( $scope ,
 
 controllersAdmin.controller( 'register' , [ '$scope' , '$http' , function( $scope , $http )
 {
-	// TODO: pobrać dane z formularza i przesłać do bazy (uwierzytelnianie)
+	$scope.user = {};
 
+	$scope.formSubmit = function ( user ) {
+		$http.post( 'Api/Site/User/create/' , {
+			user : user,
+			name : user.name,
+			email : user.email,
+			password : user.password,
+			passconf : user.passconf
+		}).success( function( errors ){
 
-	$scope.formSubmit = function () {
-		$scope.errors = {};
-		$scope.errors.email = 'Przykładowy błąd';
-		$scope.submit = true;
-		console.log( $scope.input );
+			$scope.submit = true;
+			
+			if ( errors )
+			{
+				$scope.errors = errors;
+			}
+			else
+			{
+				$scope.errors = {};
+				$scope.success = true;
+			}
+			
+		}).error( function(){
+			console.log( 'Błąd komunikacji z API' );
+		});
+
 	};
 
 }]);
