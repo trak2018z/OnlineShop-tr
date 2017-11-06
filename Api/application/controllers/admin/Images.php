@@ -8,6 +8,7 @@ class Images extends CI_Controller
 		{
 		    $tempPath = $_FILES[ 'file' ][ 'tmp_name' ];		    
 			$basePath = FCPATH . '..' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR;
+			mkdir( $basePath , 0700 );
 		    $basePath = $basePath . $id . DIRECTORY_SEPARATOR;
 		    mkdir( $basePath , 0700 );
 
