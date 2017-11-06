@@ -151,17 +151,32 @@ controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , function( $scope 
 }]);
 
 
-controllersAdmin.controller( 'login' , [ '$scope' , '$http' , function( $scope , $http )
-{
-	// TODO: pobrać dane z formularza i przesłać do bazy (uwierzytelnianie)
+controllersAdmin.controller( 'login' , [ '$scope' , '$http' , 'store' , function( $scope , $http , store ){
 
-	$scope.input = {};
+	$scope.user = {};
 
-	$scope.formSubmit = function () {
-		$scope.errors = {};
-		$scope.errors.login = 'Błędne hasło lub email';
-		console.log( $scope.input );
+	$scope.formSubmit = function ( user ) {
+
+		$http.post( 'Api/Site/User/login/' , {
+			email : user.email,
+			password : user.password
+		}).success( function( data ){
+
+			$scope.submit = true;
+			$scope.error = data.error;
+			
+			if ( !data.error )
+			{
+				store.set( 'token' , data.token );
+			}
+			
+		}).error( function(){
+			console.log( 'Błąd połączenia z API' );
+		});
+
 	};
+
+	console.log( store.get( 'token' ) );
 
 }]);
 
@@ -180,6 +195,7 @@ controllersAdmin.controller( 'register' , [ '$scope' , '$http' , function( $scop
 		}).success( function( errors ){
 
 			$scope.submit = true;
+			$scope.user = {};
 			
 			if ( errors )
 			{

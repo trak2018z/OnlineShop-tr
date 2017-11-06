@@ -10,7 +10,6 @@ class Users extends CI_Controller {
 		$_POST = json_decode( $post , true );
 
 		$this->load->model( 'Admin/User_model' );	
-
 	}
 
 	public function get( $id = false )
@@ -33,7 +32,7 @@ class Users extends CI_Controller {
 			$user = $this->input->post( 'user' );
 			unset ($user['passconf']);
 
-			$user['password'] = crypt( $user['password'], config_item('encryption_key'));
+			$user['password'] = password_hash( $user['password'], PASSWORD_DEFAULT);
 
 			$this->User_model->update( $user );
 		}
@@ -61,7 +60,7 @@ class Users extends CI_Controller {
 			$user = $this->input->post( 'user' );
 			unset ($user['passconf']);
 
-			$user['password'] = crypt( $user['password'], config_item('encryption_key'));
+			$user['password'] = password_hash( $user['password'], PASSWORD_DEFAULT);
 
 			$this->User_model->create( $user );
 		}

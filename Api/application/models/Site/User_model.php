@@ -26,4 +26,22 @@ class User_model extends CI_Model {
 		return $q->row();
 	}
 
+	public function login($email, $password)
+	{
+		$this->db->where( 'email', $email);
+		$q = $this->db->get( ' users' );
+		$result = $q->row();
+
+		if(empty($result) || !password_verify( $password , $result->password ))
+		{
+			$output = false;
+		}
+		else
+		{
+			$output = $result;
+		}
+
+		return $output;
+	}
+
 }

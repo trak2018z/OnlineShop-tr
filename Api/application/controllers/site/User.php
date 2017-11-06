@@ -10,7 +10,6 @@ class User extends CI_Controller {
 		$_POST = json_decode( $post , true );
 
 		$this->load->model( 'Site/User_model' );	
-
 	}
 
 	public function get( $id )
@@ -33,7 +32,7 @@ class User extends CI_Controller {
 			$user['role'] = 'user';
 			unset ($user['passconf']);
 
-			$user['password'] = crypt( $user['password'], config_item('encryption_key'));
+			$user['password'] = password_hash( $user['password'] , PASSWORD_DEFAULT );
 
 			$this->User_model->create( $user );
 		}
@@ -47,4 +46,32 @@ class User extends CI_Controller {
 		}
 
 	}
+
+	public function login()
+	{
+		$email = $this->input->post( 'email');
+		$password = $this->input->post( 'password');
+
+		$login = $this->User_model->login($email, $password);
+
+		if ( !$login )
+		{
+			$output['error'] = 'Błędne hasło lub email';
+		}
+		else
+		{
+			$token = $this->jwt->encode( array(
+				'userId' => $login->id,
+				'name' => $login->name,
+				'email' => $login->email,
+				'role' => $login->role,
+				'timeCreated' => time()
+				 ), config_item('encryption_key'));
+
+			$output['token'] = $token;
+		}
+
+		echo json_encode( $output );
+	}
+
 }
