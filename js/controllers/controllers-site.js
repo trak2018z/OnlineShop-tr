@@ -85,7 +85,7 @@ controllersSite.controller( 'siteOrders' , [ '$scope' , '$http' , function( $sco
 }]);
 
 
-controllersSite.controller( 'cartCtrl' , [ '$scope' , '$http' , '$filter' , 'cartSrv' , function( $scope , $http , $filter , cartSrv )
+controllersSite.controller( 'cartCtrl' , [ '$scope' , '$http' , '$filter' , 'cartSrv' , 'checkToken' , function( $scope , $http , $filter , cartSrv , checkToken )
 {
 	$scope.cart = cartSrv.show();
 
@@ -107,28 +107,39 @@ controllersSite.controller( 'cartCtrl' , [ '$scope' , '$http' , '$filter' , 'car
 		cartSrv.update( $scope.cart );
 	};
 
-	$scope.setOrder = function ( $event ) {
-
-		// TODO: sprawdź czy użytkownik jest zalogowany
-		
-		var loggedIn = true;
-		if ( !loggedIn )
+	$scope.setOrder = function ( $event ) 
+	{
+		$event.preventDefault();
+	
+		if ( !checkToken.loggedIn() )
 		{
 			$scope.alert = { type : 'warning' , msg : 'Musisz być zalogowany, żeby złożyć zamówienie.' };
-			$event.preventDefault();
 			return false;
 		}
 
-		// TODO: zapisz zamówienie w bazie
 
-		console.log( $scope.total() );
-		console.log( $scope.cart );
+		$http.post( 'Api/Site/Orders/create/' , {
 
-		$scope.alert = { type : 'success' , msg : 'Zamówienie złożone. Nie odświeżaj strony. Trwa przekierowywanie do płatności...' };
-		cartSrv.empty();
+			token: checkToken.raw(),
+			payload: checkToken.payload(),
+			items: $scope.cart,
+			total: $scope.total()
 
-		$event.preventDefault();
-		$( '#paypalForm' ).submit();
+		}).success( function( errors )
+		{
+			if ( errors )
+				$scope.alert = { type : 'danger' , msg : "Sesja wygasłą, proszę zalogować się ponownie" };
+			else
+			{
+				cartSrv.empty();
+				$scope.alert = { type : 'success' , msg : 'Zamówienie złożone. Nie odświeżaj strony. Trwa przekierowywanie do płatności...' };
+				$( '#paypalForm' ).submit();
+			}			
+
+		}).error( function(){
+			console.log( 'Błąd połączenia z API' );
+		});
+
 	};
 
 	$scope.$watch( function (){
@@ -138,7 +149,8 @@ controllersSite.controller( 'cartCtrl' , [ '$scope' , '$http' , '$filter' , 'car
 }]);
 
 
-controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , function( $scope , $http )
+
+controllersSite.controller( 'orders' , [ '$scope' , '$http' , function( $scope , $http )
 {
 
 	$http.get( 'model/orders.json' ).
@@ -151,7 +163,7 @@ controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , function( $scope 
 }]);
 
 
-controllersAdmin.controller( 'login' , [ '$scope' , '$http' , 'store' , 'checkToken' , '$location' , function( $scope , $http , store , checkToken , $location ){
+controllersSite.controller( 'login' , [ '$scope' , '$http' , 'store' , 'checkToken' , '$location' , function( $scope , $http , store , checkToken , $location ){
 
 	if ( checkToken.loggedIn() )
 		$location.path( '/products' );
@@ -183,7 +195,7 @@ controllersAdmin.controller( 'login' , [ '$scope' , '$http' , 'store' , 'checkTo
 }]);
 
 
-controllersAdmin.controller( 'register' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersSite.controller( 'register' , [ '$scope' , '$http' , function( $scope , $http ){
 
 	$scope.user = {};
 

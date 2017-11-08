@@ -60,10 +60,11 @@ myServices.factory( 'cartSrv' , [ 'store' , function( store ) {
 
 myServices.service( 'checkToken' , [ 'store' , 'jwtHelper' , function( store , jwtHelper ) {
 
-	var token = store.get( 'token' );
+	var rawToken = store.get( 'token' );
+	var token;
 
-	if ( token )
-		token = jwtHelper.decodeToken( token );
+	if ( rawToken )
+		token = jwtHelper.decodeToken( rawToken );
 	else
 		token = false;
 
@@ -105,7 +106,7 @@ myServices.service( 'checkToken' , [ 'store' , 'jwtHelper' , function( store , j
 	};
 
 	this.raw = function () {
-		return token;
+		return rawToken;
 	};
 
 	this.del = function () {
