@@ -151,7 +151,10 @@ controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , function( $scope 
 }]);
 
 
-controllersAdmin.controller( 'login' , [ '$scope' , '$http' , 'store' , function( $scope , $http , store ){
+controllersAdmin.controller( 'login' , [ '$scope' , '$http' , 'store' , 'checkToken' , '$location' , function( $scope , $http , store , checkToken , $location ){
+
+	if ( checkToken.loggedIn() )
+		$location.path( '/products' );
 
 	$scope.user = {};
 
@@ -168,6 +171,7 @@ controllersAdmin.controller( 'login' , [ '$scope' , '$http' , 'store' , function
 			if ( !data.error )
 			{
 				store.set( 'token' , data.token );
+				location.reload();
 			}
 			
 		}).error( function(){
@@ -176,13 +180,11 @@ controllersAdmin.controller( 'login' , [ '$scope' , '$http' , 'store' , function
 
 	};
 
-	console.log( store.get( 'token' ) );
-
 }]);
 
 
-controllersAdmin.controller( 'register' , [ '$scope' , '$http' , function( $scope , $http )
-{
+controllersAdmin.controller( 'register' , [ '$scope' , '$http' , function( $scope , $http ){
+
 	$scope.user = {};
 
 	$scope.formSubmit = function ( user ) {

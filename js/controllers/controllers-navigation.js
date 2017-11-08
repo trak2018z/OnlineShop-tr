@@ -3,13 +3,42 @@
 var controllersNavigation = angular.module( 'controllersNavigation' , [] );
 
 
-controllersNavigation.controller( 'navigation' , [ '$scope' , '$location' , 'cartSrv' , function( $scope , $location , cartSrv ){
+controllersNavigation.controller( 'navigation' , [ '$scope' , '$location' , 'cartSrv' , 'checkToken' , function( $scope , $location , cartSrv , checkToken ){
 
 	$scope.navigation = function () {
+
 		if ( /^\/admin/.test( $location.path() ) )
+		{
+
+			if ( !checkToken.isAdmin() )
+			{	
+				window.location.href = '#/products?alert=noAdmin';
+			}
+
 			return 'partials/admin/navigation.html';
+
+		}
 		else
+		{
+			if ( $location.search().alert == 'noAdmin' )
+				$scope.noAdmin = true;
+			else
+				$scope.noAdmin = false;
+
+
+			if ( checkToken.loggedIn() )
+				$scope.loggedIn = true;
+			else
+				$scope.loggedIn = false;
+
+
+			if ( checkToken.isAdmin() )
+				$scope.isAdmin = true;
+			else
+				$scope.isAdmin = false;
+
 			return 'partials/site/navigation.html';
+		}
 	};
 
 
@@ -20,6 +49,11 @@ controllersNavigation.controller( 'navigation' , [ '$scope' , '$location' , 'car
 	$scope.$watch(function(){
 		$scope.cart = cartSrv.show().length;
 	});
+
+	$scope.logout = function () {
+		checkToken.del();
+		location.reload();
+	};
 
 }]);
 

@@ -65,7 +65,7 @@ class User extends CI_Controller {
 				'name' => $login->name,
 				'email' => $login->email,
 				'role' => $login->role,
-				'timeCreated' => time()
+				'expireTime' => time() + 300
 				 ), config_item('encryption_key'));
 
 			$output['token'] = $token;
