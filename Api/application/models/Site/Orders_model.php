@@ -2,16 +2,14 @@
 
 class Orders_model extends CI_Model {
 
-	// public function get( $id )
-	// {
+	public function get( $id )
+	{
+		$this->db->where( 'userId' , $id );
+		$q = $this->db->get( 'orders' );
+		$q = $q->result();
 
-	// 	$this->db->where( 'id' , $id );
-	// 	$q = $this->db->get( 'users' );
-	// 	$q = $q->row();
-
-	// 	return $q;
-
-	// }
+		return $q;
+	 }
 
 	public function create( $data )
 	{
@@ -19,6 +17,3 @@ class Orders_model extends CI_Model {
 	}
 
 }
-
-/* End of file  */
-/* Location: ./application/models/ */

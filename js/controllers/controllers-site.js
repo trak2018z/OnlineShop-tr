@@ -73,15 +73,24 @@ controllersSite.controller( 'siteProduct' , [ '$scope' , '$http' , '$routeParams
 
 
 
-controllersSite.controller( 'siteOrders' , [ '$scope' , '$http' , function( $scope , $http )
+controllersSite.controller( 'siteOrders' , [ '$scope' , '$http' , 'checkToken' , function( $scope , $http, checkToken )
 {
-	$http.get( 'model/orders.json' ).
-	success( function( data ){
-		$scope.orders = data;
-	}).error( function(){
-		console.log( 'Błąd komunikacji z API' );
-	});
+	$http.post( 'Api/Site/Orders/get/' , {
 
+			token: checkToken.raw(),
+			payload: checkToken.payload(),
+
+		}).success( function( data, errors )
+		{
+			$scope.orders = data;
+
+			angular.forEach( $scope.orders , function( order , key ){
+				var parsed = JSON.parse( order.items );
+				$scope.orders[key].items = parsed;
+				})		
+		}).error( function(){
+			console.log( 'Błąd połączenia z API' );
+		});
 }]);
 
 
@@ -147,21 +156,6 @@ controllersSite.controller( 'cartCtrl' , [ '$scope' , '$http' , '$filter' , 'car
 	});
 
 }]);
-
-
-
-controllersSite.controller( 'orders' , [ '$scope' , '$http' , function( $scope , $http )
-{
-
-	$http.get( 'model/orders.json' ).
-	success( function( data ){
-		$scope.orders = data;
-	}).error( function(){
-		console.log( 'Błąd komunikacji z API' );
-	});
-
-}]);
-
 
 controllersSite.controller( 'login' , [ '$scope' , '$http' , 'store' , 'checkToken' , '$location' , function( $scope , $http , store , checkToken , $location ){
 

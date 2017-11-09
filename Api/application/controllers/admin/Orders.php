@@ -9,7 +9,7 @@ class Orders extends CI_Controller {
 		$post = file_get_contents( 'php://input' );
 		$_POST = json_decode( $post , true );
 
-		$this->load->model( 'site/Orders_model' );
+		$this->load->model( 'admin/Orders_model' );
 
 		$token = $this->input->post( 'token' );
 		$token = $this->jwt->decode( $token , config_item( 'encryption_key' ));
@@ -23,31 +23,28 @@ class Orders extends CI_Controller {
 		}
 	}
 
-	public function create()
-	{
-		$payload = $this->input->post( 'payload' );
-		unset( $payload['role'] );
-		unset( $payload['expireTime'] );
-
-		$data = $payload;
-
-		$items = $this->input->post( 'items' );
-		$items = json_encode( $items , JSON_FORCE_OBJECT );
-
-		$data['items'] = $items;
-		$data['total'] = $this->input->post( 'total' );
-
-		$this->Orders_model->create( $data );
-	}
-
 	public function get()
 	{
 		$payload = $this->input->post( 'payload' );
-		$userId = $payload['userId'];
 
-		$output = $this->Orders_model->get($userId);
+		$output = $this->Orders_model->get();
 
 		echo json_encode( $output );
+	}
+
+	public function update()
+	{
+		$id = $this->input->post('id');
+		$data['status'] = $this->input->post('status');
+
+		$this->Orders_model->update($id, $data);
+	}
+
+	public function delete()
+	{
+		$id = $this->input->post('id');
+
+		$this->Orders_model->delete($id);
 	}
 
 }

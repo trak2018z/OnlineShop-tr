@@ -244,36 +244,55 @@ controllersAdmin.controller( 'userCreate' , [ '$scope' , '$http' , '$timeout' , 
 }]);
 
 
-controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , 'checkToken' , function( $scope , $http , checkToken )
+{
+	$http.post( 'Api/Admin/Orders/get/' , {
 
-	$http.get( 'model/orders.json' ).
-	success( function( data ){
-		$scope.orders = data;
-	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
-	});
+			token: checkToken.raw(),
+			payload: checkToken.payload(),
 
-	$scope.delete = function ( user , $index ) {
+		}).success( function( data, errors )
+		{
+			$scope.orders = data;
+
+			angular.forEach( $scope.orders , function( order , key ){
+				var parsed = JSON.parse( order.items );
+				$scope.orders[key].items = parsed;
+				})		
+		}).error( function(){
+			console.log( 'Błąd połączenia z API' );
+		});
+
+	$scope.delete = function ( order , $index ) {
 
 		if ( !confirm( 'Czy na pewno chcesz usunąć to zdjęcie' ) )
 			return false;
 
 		$scope.orders.splice( $index , 1 );
 
-		// TODO: przesłać dane przez API
+		$http.post( 'Api/Admin/Orders/delete/' , {
+			token: checkToken.raw(),
+			id: order.id
+		}).error( function(){
+			console.log( 'Błąd połączenia z API' );
+		});
 
 	};
 
 	$scope.changeStatus = function ( order ) {
-
-		console.log( 'test' );
 
 		if ( order.status == 0 )
 			order.status = 1;
 		else
 			order.status = 0;
 
-		// TODO: przesłać dane przez API
+		$http.post( 'Api/Admin/Orders/update/' , {
+			token: checkToken.raw(),
+			id: order.id,
+			status : order.status
+		}).error( function(){
+			console.log( 'Błąd połączenia z API' );
+		});
 
 	};
 
