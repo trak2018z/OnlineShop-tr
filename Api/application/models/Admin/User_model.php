@@ -29,6 +29,8 @@ class User_model extends CI_Model {
 
 	public function create( $user )
 	{
+		$user['password'] = password_hash( $user['password'], PASSWORD_DEFAULT);
+		
 		$this->db->insert( 'users' , $user );
 	}
 

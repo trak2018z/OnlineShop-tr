@@ -3,13 +3,14 @@
 var controllersAdmin = angular.module( 'controllersAdmin' , [ 'angularFileUpload' , 'myDirectives' ] );
 
 
-controllersAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scope , $http ){
-	
-	$http.get( 'Api/admin/Products/get' ).
-	success( function( data ){
+controllersAdmin.controller( 'products' , [ '$scope' , '$http' , 'checkToken' , function( $scope , $http , checkToken )
+{
+	$http.post( 'Api/admin/Products/get' , {
+		token: checkToken.raw()
+	}).success( function( data ){
 		$scope.products = data;
 	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
+		console.log( 'Błąd komunikacji z API' );
 	});
 
 	$scope.delete = function ( product , $index ) {
@@ -20,6 +21,7 @@ controllersAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scop
 		$scope.products.splice( $index , 1 );
 
 		$http.post( 'Api/admin/Products/delete/' , {
+			token: checkToken.raw(),
 			product : product
 		}).error( function(){
 			console.log( 'Błąd komunikacji z API' );
@@ -30,33 +32,23 @@ controllersAdmin.controller( 'products' , [ '$scope' , '$http' , function( $scop
 }]);
 
 
-controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , 'FileUploader' , '$timeout' , function( $scope , $http , $routeParams , FileUploader, $timeout ){
-
+controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParams' , 'FileUploader' , '$timeout' , 'checkToken' , function( $scope , $http , $routeParams , FileUploader , $timeout , checkToken )
+{
 	var productId = $routeParams.id;
 	$scope.id = productId;
 
-	$http.get( 'Api/admin/Products/get/' + productId ).
-	success( function( data ){
+	$http.post( 'Api/Admin/Products/get/' + productId , {
+		token: checkToken.raw()
+	}).success( function( data ){
 		$scope.product = data;
 	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
+		console.log( 'Błąd komunikacji z API' );
 	});
-
-	function getImages(){
-		$http.get( 'Api/admin/images/get/' + productId ).
-	success( function( data ){
-		$scope.images = data;
-	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
-	});
-	}
-	getImages();
-
-	
 
 	$scope.saveChanges = function ( product ) {
 
-		$http.post( 'Api/admin/Products/update/' , {
+		$http.post( 'Api/Admin/Products/update/' , {
+			token: checkToken.raw(),
 			product : product
 		}).success( function(){
 			$scope.success = true;
@@ -71,19 +63,20 @@ controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParam
 
 	};
 
-	$scope.delImage = function ( imageName, $index ) {
-		$http.post( 'Api/admin/images/delete/', {
-		 id : productId,
-		 image : imageName 
-		}).	success( function(  ){
-			$scope.images.splice( $index , 1 );
+	function getImages() {
+		$http.post( 'Api/Admin/Images/get/' + productId , {
+			token: checkToken.raw()
+		}).success( function( data ){
+			$scope.images = data; 
 		}).error( function(){
-			console.log( 'Błąd pobrania pliku json' );
+			console.log( 'Błąd komunikacji z API' );
 		});
-	};
+	}
+	getImages();
 
     var uploader = $scope.uploader = new FileUploader({
-        url: 'Api/admin/images/upload/' + productId // ścieżka do Api obsługującego upload
+        url: 'Api/Admin/Images/upload/' + productId // ścieżka do Api obsługującego upload
+
     });
 
     uploader.filters.push({
@@ -95,19 +88,49 @@ controllersAdmin.controller( 'productEdit' , [ '$scope' , '$http' , '$routeParam
     });
 
     uploader.onCompleteItem = function(fileItem, response, status, headers) {
-        console.info('onCompleteItem', fileItem, response, status, headers);
         getImages();
+    };
+
+    $scope.delImage = function ( imageName , $index ) {
+
+    	$scope.images.splice( $index , 1 );
+
+		$http.post( 'Api/Admin/Images/delete/' , {
+
+			token: checkToken.raw(),
+			id : productId,
+			image : imageName
+
+		}).error( function(){
+			console.log( 'Błąd komunikacji z API' );
+		});
+
+    };
+
+    $scope.setThumb = function ( product , image ) {
+
+		$http.post( 'api/admin/images/setThumb/' , {
+
+			token: checkToken.raw(),
+			product : product,
+			image : image
+
+		}).error( function(){
+			console.log( 'Błąd komunikacji z API' );
+		});
+
     };
 
 
 }]);
 
 
-controllersAdmin.controller( 'productCreate' , [ '$scope' , '$http' , '$timeout' ,  function( $scope , $http, $timeout ){
+controllersAdmin.controller( 'productCreate' , [ '$scope' , '$http' , '$timeout' , 'checkToken' , function( $scope , $http , $timeout , checkToken ){
 
 	$scope.createProduct = function ( product ) {
 
-		$http.post( 'Api/admin/Products/create/' , {
+		$http.post( 'Api/Admin/Products/create/' , {
+			token: checkToken.raw(),
 			product : product
 		}).success( function(){
 			$scope.success = true;
@@ -126,13 +149,14 @@ controllersAdmin.controller( 'productCreate' , [ '$scope' , '$http' , '$timeout'
 }]);
 
 
-controllersAdmin.controller( 'users' , [ '$scope' , '$http' , function( $scope , $http ){
+controllersAdmin.controller( 'users' , [ '$scope' , '$http' , 'checkToken' , function( $scope , $http , checkToken ){
 
-	$http.get( 'Api/admin/Users/get' ).
-	success( function( data ){
+	$http.post( 'Api/Admin/Users/get' , {
+		token: checkToken.raw()
+	}).success( function( data ){
 		$scope.users = data;
 	}).error( function(){
-		console.log( 'Błąd pobrania pliku json' );
+		console.log( 'Błąd komunikacji z API' );
 	});
 
 	$scope.delete = function ( user , $index ) {
@@ -142,7 +166,8 @@ controllersAdmin.controller( 'users' , [ '$scope' , '$http' , function( $scope ,
 
 		$scope.users.splice( $index , 1 );
 
-		$http.post( 'Api/admin/users/delete/' , {
+		$http.post( 'Api/Admin/Users/delete/' , {
+			token: checkToken.raw(),
 			user : user
 		}).error( function(){
 			console.log( 'Błąd komunikacji z API' );
@@ -154,13 +179,14 @@ controllersAdmin.controller( 'users' , [ '$scope' , '$http' , function( $scope ,
 }]);
 
 
-controllersAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , '$timeout' , function( $scope , $http , $routeParams , $timeout ){
+controllersAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' , '$timeout' , 'checkToken' , function( $scope , $http , $routeParams , $timeout , checkToken ){
 
 	var userId = $routeParams.id;
 	$scope.id = userId;
 
-	$http.post( 'Api/admin/Users/get/' + userId ).
-	success( function( data ){
+	$http.post( 'api/admin/users/get/' + userId , {
+		token: checkToken.raw()
+	}).success( function( data ){
 		$scope.user = data;
 		console.log( data );
 	}).error( function(){
@@ -169,7 +195,8 @@ controllersAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' 
 
 	$scope.saveChanges = function ( user ) {
 
-		$http.post( 'Api/admin/Users/update/' , {
+		$http.post( 'Api/Admin/Users/update/' , {
+			token: checkToken.raw(),
 			user : user,
 			id : userId,
 			name : user.name,
@@ -204,14 +231,15 @@ controllersAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' 
 }]);
 
 
-controllersAdmin.controller( 'userCreate' , [ '$scope' , '$http' , '$timeout' , function( $scope , $http , $timeout ){
+controllersAdmin.controller( 'userCreate' , [ '$scope' , '$http' , '$timeout' , 'checkToken' , function( $scope , $http , $timeout , checkToken ){
 
 	$scope.user = {};
 	$scope.user.role = 'user';
 
 	$scope.createUser = function ( user ) {
 
-		$http.post( 'Api/admin/Users/create/' , {
+		$http.post( 'Api/Admin/Users/create/' , {
+			token: checkToken.raw(),
 			user : user,
 			name : user.name,
 			email : user.email,
@@ -248,20 +276,23 @@ controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , 'checkToken' , fu
 {
 	$http.post( 'Api/Admin/Orders/get/' , {
 
-			token: checkToken.raw(),
-			payload: checkToken.payload(),
+		token: checkToken.raw(),
+		payload: checkToken.payload()
 
-		}).success( function( data, errors )
-		{
-			$scope.orders = data;
+	}).success( function( data ){
 
-			angular.forEach( $scope.orders , function( order , key ){
-				var parsed = JSON.parse( order.items );
-				$scope.orders[key].items = parsed;
-				})		
-		}).error( function(){
-			console.log( 'Błąd połączenia z API' );
+		$scope.orders = data;
+
+		console.log( data );
+
+		angular.forEach( $scope.orders , function( order , key ){
+			var parsed = JSON.parse( order.items );
+			$scope.orders[key].items = parsed;
 		});
+
+	}).error( function(){
+		console.log( 'Błąd komunikacji z API' );
+	});
 
 	$scope.delete = function ( order , $index ) {
 
@@ -274,7 +305,7 @@ controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , 'checkToken' , fu
 			token: checkToken.raw(),
 			id: order.id
 		}).error( function(){
-			console.log( 'Błąd połączenia z API' );
+			console.log( 'Błąd komunikacji z API' );
 		});
 
 	};
@@ -291,7 +322,7 @@ controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , 'checkToken' , fu
 			id: order.id,
 			status : order.status
 		}).error( function(){
-			console.log( 'Błąd połączenia z API' );
+			console.log( 'Błąd komunikacji z API' );
 		});
 
 	};

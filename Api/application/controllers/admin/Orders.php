@@ -13,9 +13,11 @@ class Orders extends CI_Controller {
 
 		$token = $this->input->post( 'token' );
 		$token = $this->jwt->decode( $token , config_item( 'encryption_key' ));
-		$token = get_object_vars($token);
 
-		if($token["expireTime"] < time())
+		if ( $token->role != 'admin' )
+			exit( 'Nie jesteś adminem' );
+
+		if($token->expireTime < time())
 		{
 			$errors = true;
 			echo json_encode( $errors );

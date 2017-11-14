@@ -2,6 +2,25 @@
 
 class Images extends CI_Controller
 {
+	public function __construct()
+	{
+		parent::__construct();
+
+		$token = $this->input->post( 'token' );
+		$token = $this->jwt->decode( $token , config_item( 'encryption_key' ));
+		$token = get_object_vars($token);
+
+		if ( $token->role != 'admin' )
+			exit( 'Nie jesteś adminem' );
+
+		if($token->expireTime < time())
+		{
+			$errors = true;
+			echo json_encode( $errors );
+			return false;
+		}
+	}
+
 	public function upload($id)
 	{
 		if ( !empty( $_FILES ) )
