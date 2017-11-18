@@ -36,6 +36,10 @@
         Nie jesteś adminem.
       </div>
 
+      <div class="alert alert-warning" ng-if="tokenExpired">
+        Sesja wygałsa. Proszę zalogować się ponownie
+      </div>
+
     </div>
   </div>
 </div>

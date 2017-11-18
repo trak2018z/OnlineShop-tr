@@ -15,6 +15,12 @@ controllersNavigation.controller( 'navigation' , [ '$scope' , '$location' , 'car
 				window.location.href = '#/products?alert=noAdmin';
 			}
 
+			if ( checkToken.expired() )
+			{	
+				checkToken.del();
+				window.location.href = '#/products?alert=tokenExpired';
+			}
+
 			return 'partials/admin/navigation.html';
 
 		}
@@ -24,6 +30,11 @@ controllersNavigation.controller( 'navigation' , [ '$scope' , '$location' , 'car
 				$scope.noAdmin = true;
 			else
 				$scope.noAdmin = false;
+
+			if ( $location.search().alert == 'tokenExpired' )
+				$scope.tokenExpired = true;
+			else
+				$scope.tokenExpired = false;
 
 
 			if ( checkToken.loggedIn() )

@@ -123,7 +123,7 @@
       <div ng-repeat="image in images">
           <div class="pull-left" style="position:relative;">
           <button type="button" ng-click="delImage( image , $index )" class="btn btn-danger btn-xs" style="position:absolute; right:0;"><strong>&times;</strong></button>
-          <img ng-src="uploads/{{id}}/{{image}}" alt="" style="width:150px; margin:5px;" class="img-thumbnail">
+            <img ng-click="setThumb( product , image )" ng-src="uploads/{{product.id}}/{{image}}" alt="" style="width:150px; margin:5px; cursor: pointer;" class="img-thumbnail">
           </div>
       </div>
 
@@ -133,7 +133,7 @@
   <div class="row">
     <div class="col-sm-12 text-right">
       <hr>
-      <a href="#/admin/products" class="btn btn-default">Wróć bez zmian</a>
+      <a href="#/admin/products" class="btn btn-default">Wróć</a>
       <button type="submit" class="btn btn-primary" ng-if="!success">Zapisz zmiany</button>
       <button type="button" class="btn btn-success" ng-if="success" disabled>Zmiany zapisane</button>
       <p>&nbsp;</p>

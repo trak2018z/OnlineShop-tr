@@ -18,7 +18,7 @@ class Orders extends CI_Controller {
 		{
 			$errors = true;
 			echo json_encode( $errors );
-			return false;
+			exit( 'Sesja wygasła. Proszę zalogować się ponownie' );
 		}
 	}
 

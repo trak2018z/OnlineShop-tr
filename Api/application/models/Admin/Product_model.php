@@ -35,4 +35,11 @@ class Product_model extends CI_Model
 		$this->db->where( 'id' , $product['id'] );
 		$this->db->delete( 'products' );
 	}
+
+	public function setThumb( $productId , $product )
+	{
+		$this->db->where( 'id' , $productId );
+		$this->db->update( 'products' , $product );
+	}
+
 }

@@ -6,19 +6,7 @@ class Images extends CI_Controller
 	{
 		parent::__construct();
 
-		$token = $this->input->post( 'token' );
-		$token = $this->jwt->decode( $token , config_item( 'encryption_key' ));
-		$token = get_object_vars($token);
-
-		if ( $token->role != 'admin' )
-			exit( 'Nie jesteś adminem' );
-
-		if($token->expireTime < time())
-		{
-			$errors = true;
-			echo json_encode( $errors );
-			return false;
-		}
+		$this->load->model( 'admin/Product_model' );
 	}
 
 	public function upload($id)
@@ -60,23 +48,74 @@ class Images extends CI_Controller
 		{
 			$files[].=$file;
 		}
+	    $newFiles = array();
+	    foreach ( $files as $file )
+	    {
+	    	$newFiles[] .= $file;
+	    }
 
-		echo json_encode($files);
+	    echo json_encode( $newFiles );
+
 	}
 
 	public function delete ()
 	{
-		$post = file_get_contents( 'php://input');
-		$_POST = json_decode( $post, true);
+		$post = file_get_contents( 'php://input' );
+		$_POST = json_decode( $post , true );
+
+		$token = $this->input->post( 'token' );
+		$token = $this->jwt->decode( $token , config_item( 'encryption_key' ) );	
+
+		if ( $token->role != 'admin' )
+			exit( 'Nie jesteś adminem' );
+
+		if($token->expireTime < time())
+        {
+            $errors = true;
+            echo json_encode( $errors );
+            exit( 'Sesja wygasła. Proszę zalogować się ponownie' );
+        }
+
 		
+		
+		$id = $this->input->post( 'id' );
+		$image = $this->input->post( 'image' );
 
-		$id = $this->input->post('id');
-		$image = $this->input->post('image');
+	    $imagePath = FCPATH . '..' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR;
+	    $imagePath = $imagePath . $id . DIRECTORY_SEPARATOR;
+	    $imagePath = $imagePath . $image;
 
-		$imagePath = FCPATH . '..' . DIRECTORY_SEPARATOR . 'uploads' . DIRECTORY_SEPARATOR;
-		$imagePath = $imagePath . $id . DIRECTORY_SEPARATOR;
-		$imagePath = $imagePath . $image;
-
-		unlink($imagePath);
+	    unlink( $imagePath );
 	}
+
+	public function setThumb()
+	{
+
+		$post = file_get_contents( 'php://input' );
+		$_POST = json_decode( $post , true );
+
+		$token = $this->input->post( 'token' );
+		$token = $this->jwt->decode( $token , config_item( 'encryption_key' ) );	
+
+		if ( $token->role != 'admin' )
+			exit( 'Nie jesteś adminem' );
+
+		if($token->expireTime < time())
+        {
+            $errors = true;
+            echo json_encode( $errors );
+            exit( 'Sesja wygasła. Proszę zalogować się ponownie' );
+        }
+
+
+		$input = $this->input->post( 'product' );
+		$productId = $input['id'];
+
+		$imageName = $this->input->post( 'image' );
+		$product['thumb'] = $imageName;
+
+		$this->Product_model->setThumb( $productId , $product );
+	}
+
+
 }
