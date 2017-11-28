@@ -27,8 +27,6 @@ class Orders extends CI_Controller {
 
 	public function get()
 	{
-		$payload = $this->input->post( 'payload' );
-
 		$output = $this->Orders_model->get();
 
 		echo json_encode( $output );

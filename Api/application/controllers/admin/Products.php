@@ -47,7 +47,7 @@ class Products extends CI_Controller
 	{
 		$product = $this->input->post( 'product' );
 		$this->deleteDir( $product['id'] );
-		$this->Products_model->delete( $product );
+		$this->Product_model->delete( $product );
 	}
 
 	public function deleteDir( $id )

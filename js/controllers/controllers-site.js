@@ -35,7 +35,7 @@ controllersSite.controller( 'siteProduct' , [ '$scope' , '$http' , '$routeParams
 
 	var id = $routeParams.id;
 
-	$http.post( 'Api/site/Products/get/' + id ).
+	$http.get( 'Api/site/Products/get/' + id ).
 	success( function( data ){
 		$scope.product = data;
 		$scope.checkCart( $scope.product );

@@ -184,7 +184,7 @@ controllersAdmin.controller( 'userEdit' , [ '$scope' , '$http' , '$routeParams' 
 	var userId = $routeParams.id;
 	$scope.id = userId;
 
-	$http.post( 'api/admin/users/get/' + userId , {
+	$http.post( 'Api/Admin/users/get/' + userId , {
 		token: checkToken.raw()
 	}).success( function( data ){
 		$scope.user = data;
@@ -277,7 +277,6 @@ controllersAdmin.controller( 'orders' , [ '$scope' , '$http' , 'checkToken' , fu
 	$http.post( 'Api/Admin/Orders/get/' , {
 
 		token: checkToken.raw(),
-		payload: checkToken.payload()
 
 	}).success( function( data ){
 
